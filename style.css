@@ -1,0 +1,237 @@
+:root {
+    --primary-color: #6366f1;
+    --secondary-color: #ec4899;
+    --background-color: #f8fafc;
+    --cell-background: #ffffff;
+    --text-color: #1e293b;
+    --border-color: #e2e8f0;
+    --x-color: #6366f1;
+    --o-color: #ec4899;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 10px; /* Less padding so scrolling isn't needed */
+}
+
+.container {
+    max-width: 400px; /* Smaller container */
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 2.2rem;
+    text-shadow: 2px 2px 4px var(--shadow-color);
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+
+.player {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 15px;
+    border-radius: 10px;
+    background-color: var(--cell-background);
+    box-shadow: 0 4px 6px var(--shadow-color);
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    transform: scale(0.95);
+}
+
+.player.active {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 6px 12px var(--shadow-color);
+}
+
+.player-x.active {
+    border-bottom: 3px solid var(--x-color);
+}
+
+.player-o.active {
+    border-bottom: 3px solid var(--o-color);
+}
+
+.player-label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.player-x .player-label {
+    color: var(--x-color);
+}
+
+.player-o .player-label {
+    color: var(--o-color);
+}
+
+.score {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.status {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    height: 30px;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 8px;
+    margin-bottom: 20px;
+}
+
+.cell {
+    background-color: var(--cell-background);
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.cell:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 12px var(--shadow-color);
+}
+
+/* X Mark – simplified without keyframe animations */
+.cell.x::before,
+.cell.x::after {
+    content: '';
+    position: absolute;
+    width: 15%;
+    height: 70%;
+    background-color: var(--x-color);
+    border-radius: 5px;
+    transition: transform 0.3s ease-out;
+}
+.cell.x::before {
+    transform: rotate(45deg) scale(1);
+}
+.cell.x::after {
+    transform: rotate(-45deg) scale(1);
+}
+
+/* O Mark – using fixed pixel border to ensure visibility */
+.cell.o::before {
+    content: '';
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    border: 8px solid var(--o-color);  /* Changed from percentage to fixed px */
+    border-radius: 50%;
+    transition: transform 0.3s ease-out;
+    transform: scale(1);
+}
+
+/* Remove win animation for a more static effect */
+.cell.win {
+    animation: none;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px var(--shadow-color);
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px var(--shadow-color);
+}
+.btn:active {
+    transform: translateY(0);
+}
+
+.winning-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 2rem;
+    gap: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.winning-message.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.winning-message-text {
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 500px) {
+    .board {
+        grid-gap: 5px;
+    }
+    
+    .cell {
+        font-size: 2rem;
+    }
+    
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 200px;
+    }
+}
